@@ -1,11 +1,22 @@
-﻿@{
+﻿@model InputModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>Привет</p>
-    <p><a href="https://istudent.urfu.ru"><button type="button" class="btn btn-primary">Сайт УрФУ</button></a></p>
-    <p><button><a href="/home/Dopolnitelno">Дополнительно</a></button></p>
-</div>
+@if (Model != null)
+{
+    
+}
+<div>Вы ввели: @Model?.Number1 @Model?.Number2</div>
+
+<form method="post">
+    <div class="mb-3">
+        <label for="exampleInputEmail" class="form-label">Фамилия</label>
+        <input type="text" name="lastName" class="form-cotrol" id="exampleInputEmail" arsia-describedby="emailHelp">
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Имя</label>
+        <input type="text" name="firstName" class="form-cotrol" id="exampleInputPassword1">
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>

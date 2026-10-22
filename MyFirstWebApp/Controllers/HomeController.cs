@@ -1,6 +1,8 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MyFirstWebApp.Data;
 using MyFirstWebApp.Models;
+using System.Diagnostics;
 
 namespace MyFirstWebApp.Controllers
 {
@@ -8,17 +10,24 @@ namespace MyFirstWebApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly MyAplicationContext _context;
+
+       public HomeController(ILogger<HomeController> logger, MyAplicationContext context)
         {
+            _context = context;
             _logger = logger;
         }
 
-        public IActionResult Index()
+        [HttpPost]
+        public IActionResult Index(InputModel model)
         {
-            return View();
+            _context.Auto.
+
+            return View(viewModel);
         }
 
-        public IActionResult Privacy()
+            [HttpGet]
+        public IActionResult Index()
         {
             return View();
         }
