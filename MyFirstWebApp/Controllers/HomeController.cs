@@ -18,6 +18,7 @@ namespace MyFirstWebApp.Controllers
             _logger = logger;
         }
 
+        #region -- Фильтрация
         [HttpPost]
         public IActionResult Index(string brand, string model)
         {
@@ -44,6 +45,7 @@ namespace MyFirstWebApp.Controllers
 
             return View(cars);
         }
+        #endregion
 
         #region -- Добавление
         [HttpPost]
