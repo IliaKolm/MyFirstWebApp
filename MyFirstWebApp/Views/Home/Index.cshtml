@@ -1,21 +1,29 @@
-﻿@model InputModel
+﻿@model List<MyFirstWebApp.Data.Car>
 @{
     ViewData["Title"] = "Home Page";
 }
 
-@if (Model != null)
-{
-    
-}
-<div>Вы ввели: @Model?.Number1 @Model?.Number2</div>
+<table>
+    <tr>
+        <td>Марка</td>
+        <td>Модель</td>
+    </tr>
+    @foreach(var item in Model)
+    {
+        <tr>
+            <td>@item.Brand</td>
+            <td>@item.Model</td>
+        </tr>
+    }
+</table>
 
 <form method="post">
     <div class="mb-3">
-        <label for="exampleInputEmail" class="form-label">Фамилия</label>
+        <label for="exampleInputEmail" class="form-label">Марка</label>
         <input type="text" name="lastName" class="form-cotrol" id="exampleInputEmail" arsia-describedby="emailHelp">
     </div>
     <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Имя</label>
+        <label for="exampleInputPassword1" class="form-label">Модель</label>
         <input type="text" name="firstName" class="form-cotrol" id="exampleInputPassword1">
     </div>
     <button type="submit" class="btn btn-primary">Сохранить</button>

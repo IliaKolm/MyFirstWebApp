@@ -21,21 +21,17 @@ namespace MyFirstWebApp.Controllers
         [HttpPost]
         public IActionResult Index(InputModel model)
         {
-            _context.Auto.
-
-            return View(viewModel);
+            return View();
         }
 
             [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            var cars = _context.Cars.ToList();
+
+            return View(cars);
         }
 
-        public IActionResult Dopolnitelno()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
