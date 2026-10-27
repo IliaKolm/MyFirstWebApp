@@ -23,6 +23,8 @@ namespace CarWebApi.Controllers
         [HttpGet]
         public IEnumerable<CarGet> Get()
         {
+            _logger.LogInformation("Получаю список авто");
+
             return _context.Cars
                 .Select(x => new CarGet
                 {
@@ -33,9 +35,18 @@ namespace CarWebApi.Controllers
                 .ToList();
         }
 
+        [HttpGet("{id}")]
+        public Car? Get(int id)
+        {
+            return _context.Cars
+                .FirstOrDefault(x => x.Id == id);
+        }
+
         [HttpPost]
         public IEnumerable<Car> Post(string? brand, string? model)
         {
+            _logger.LogInformation("Получаю список авто с фильтром");
+
             var query = _context.Cars.AsQueryable();
 
             if (!string.IsNullOrEmpty(brand))
@@ -55,6 +66,8 @@ namespace CarWebApi.Controllers
         [HttpPut]
         public Car Put(CarAdd request)
         {
+            _logger.LogInformation("Добавляю новое авто");
+
             var car = new Car
             {
                 Brand = request.Brand,
@@ -93,6 +106,7 @@ namespace CarWebApi.Controllers
             {
                 car.Brand = model.Brand;
                 car.Model = model.Model;
+                car.Password = model.Password;
 
                 _context.Update(car);
                 _context.SaveChanges();

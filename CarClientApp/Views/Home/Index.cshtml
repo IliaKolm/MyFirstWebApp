@@ -1,0 +1,38 @@
+﻿@model List<CarClientApp.Data.Car>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<a href="/home/add"><button class="btn btn-outline-primary">Добавить авто</button></a>
+
+<form method="post" class="row row-cols-lg-auto g-3 align-items-center mt-2">
+
+    <div class="col-12">
+        <input type="text" name="brand" class="form-cotrol" id="exampleInputEmail" arsia-describedby="emailHelp" placeholder="Марка">
+    </div>
+    <div class="col-12">
+        <input type="text" name="model" class="form-cotrol" id="exampleInputPassword1" placeholder="Модель">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Найти</button>
+</form>
+
+<table class="table">
+    <tr>
+        <th>Марка</th>
+        <th>Модель</th>
+        <th>Действия</th>
+    </tr>
+    @foreach(var item in Model)
+    {
+        <tr>
+            <td>@item.Brand</td>
+            <td>@item.Model</td>
+            <td>
+                <a href="/home/edit/@item.Id">Редактировать</a>
+                <a href="/home/remove/@item.Id">Удалить</a>
+            </td>
+        </tr>
+    }
+</table>
