@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<CarClientApp.Data.Group>
+@{
     ViewData["Title"] = "Новое авто";
 }
 
@@ -12,6 +13,15 @@
     <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Модель</label>
         <input type="text" name="model" class="form-cotrol" id="exampleInputPassword1">
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Группа</label>
+        <select name="groupId" class="form-cotrol">
+            @foreach(var group in Model)
+                {
+                    <option value="@group.Id">@group.Name</option>
+                }
+            </select>
     </div>
     <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Пароль</label>

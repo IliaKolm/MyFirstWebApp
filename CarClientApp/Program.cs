@@ -1,7 +1,13 @@
+using CarClientApp.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient<CarClientService>(x => {
+    x.BaseAddress = new Uri("http://localhost:5090");
+    });
 
 var app = builder.Build();
 

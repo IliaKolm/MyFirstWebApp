@@ -5,6 +5,8 @@ namespace CarWebApi.Data
 {
     public class MyAplicationContext : DbContext
     {
+        public DbSet<Group> Groups { get; set; }
+
         public DbSet<Car> Cars { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

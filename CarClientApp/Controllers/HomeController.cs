@@ -1,5 +1,6 @@
 using CarClientApp.Data;
 using CarClientApp.Models;
+using CarClientApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Text.Json;
@@ -10,47 +11,46 @@ namespace CarClientApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly CarClientService _carClientService;
+
+        public HomeController(ILogger<HomeController> logger, CarClientService carClientService)
         {
             _logger = logger;
+            _carClientService = carClientService;
         }
 
         [HttpPost]
-        public IActionResult Index(string brand, string model)
+        public async Task<IActionResult> Index(string brand, string model)
         {
-            return View();
+            var responseData = await _carClientService.SearchCars(brand, model);
+
+            return View(responseData);
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:5090/Car");
-            var responseText = await response.Content.ReadAsStringAsync();
-            var jsonOptions = new JsonSerializerOptions()
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            };
+            var carData = await _carClientService.GetCarAll();
 
-            var responseData = JsonSerializer.Deserialize<List<Car>>(responseText, jsonOptions);
-
-            return View(responseData);
+            return View(carData);
         }
 
         #region -- Добавление
         [HttpPost]
         public async Task<IActionResult> Add(CarAddDto request)
         {
-            var httpClient = new HttpClient();
-            var response = await httpClient.PutAsJsonAsync("http://localhost:5090/Car", request);
+            await _carClientService.AddCar(request);
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
-            return View();
+
+            var groups = await _carClientService.GetGroupAll();
+
+            return View(groups);
         }
         #endregion
 
@@ -58,8 +58,7 @@ namespace CarClientApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(CarEditDto request)
         {
-            var httpClient = new HttpClient();
-            var response = await httpClient.PatchAsJsonAsync("http://localhost:5090/Car", request);
+            await _carClientService.Edit(request);
 
             return RedirectToAction(nameof(Index));
         }
@@ -67,15 +66,7 @@ namespace CarClientApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync($"http://localhost:5090/Car/{id}");
-            var responseText = await response.Content.ReadAsStringAsync();
-            var jsonOptions = new JsonSerializerOptions()
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            };
-
-            var responseData = JsonSerializer.Deserialize<Car>(responseText, jsonOptions);
+            var responseData = await _carClientService.GetCarById(id);
 
             return View(responseData);
         }
@@ -85,8 +76,7 @@ namespace CarClientApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Remove(int id)
         {
-            var httpClient = new HttpClient();
-            var response = await httpClient.DeleteAsync($"http://localhost:5090/Car?carId={id}");
+            await _carClientService.Remove(id);
 
             return RedirectToAction(nameof(Index));
         }

@@ -72,7 +72,8 @@ namespace CarWebApi.Controllers
             {
                 Brand = request.Brand,
                 Model = request.Model,
-                Password = request.Password
+                Password = request.Password,
+                GroupId = request.GroupId
             };
 
             _context.Cars.Add(car);
