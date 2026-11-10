@@ -1,96 +1,97 @@
 using CarClientApp.Data;
 using CarClientApp.Models;
 using CarClientApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Text.Json;
 
-namespace CarClientApp.Controllers
+namespace CarClientApp.Controllers;
+
+[Authorize]
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly ILogger<HomeController> _logger;
+
+    private readonly CarClientService _carClientService;
+
+    public HomeController(ILogger<HomeController> logger, CarClientService carClientService)
     {
-        private readonly ILogger<HomeController> _logger;
+        _logger = logger;
+        _carClientService = carClientService;
+    }
 
-        private readonly CarClientService _carClientService;
+    [HttpPost]
+    public async Task<IActionResult> Index(string brand, string model)
+    {
+        var responseData = await _carClientService.SearchCars(brand, model);
 
-        public HomeController(ILogger<HomeController> logger, CarClientService carClientService)
-        {
-            _logger = logger;
-            _carClientService = carClientService;
-        }
+        return View(responseData);
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Index(string brand, string model)
-        {
-            var responseData = await _carClientService.SearchCars(brand, model);
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        var carData = await _carClientService.GetCarAll();
 
-            return View(responseData);
-        }
+        return View(carData);
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var carData = await _carClientService.GetCarAll();
+    #region -- Добавление
+    [HttpPost]
+    public async Task<IActionResult> Add(CarAddDto request)
+    {
+        await _carClientService.AddCar(request);
 
-            return View(carData);
-        }
+        return RedirectToAction(nameof(Index));
+    }
 
-        #region -- Добавление
-        [HttpPost]
-        public async Task<IActionResult> Add(CarAddDto request)
-        {
-            await _carClientService.AddCar(request);
+    [HttpGet]
+    public async Task<IActionResult> Add()
+    {
 
-            return RedirectToAction(nameof(Index));
-        }
+        var groups = await _carClientService.GetGroupAll();
 
-        [HttpGet]
-        public async Task<IActionResult> Add()
-        {
+        return View(groups);
+    }
+    #endregion
 
-            var groups = await _carClientService.GetGroupAll();
+    #region -- Редактирование
+    [HttpPost]
+    public async Task<IActionResult> Edit(CarEditDto request)
+    {
+        await _carClientService.Edit(request);
 
-            return View(groups);
-        }
-        #endregion
+        return RedirectToAction(nameof(Index));
+    }
 
-        #region -- Редактирование
-        [HttpPost]
-        public async Task<IActionResult> Edit(CarEditDto request)
-        {
-            await _carClientService.Edit(request);
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var responseData = await _carClientService.GetCarById(id);
 
-            return RedirectToAction(nameof(Index));
-        }
+        return View(responseData);
+    }
+    #endregion
 
-        [HttpGet]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var responseData = await _carClientService.GetCarById(id);
+    #region -- Удаление
+    [HttpGet]
+    public async Task<IActionResult> Remove(int id)
+    {
+        await _carClientService.Remove(id);
 
-            return View(responseData);
-        }
-        #endregion
+        return RedirectToAction(nameof(Index));
+    }
+    #endregion
 
-        #region -- Удаление
-        [HttpGet]
-        public async Task<IActionResult> Remove(int id)
-        {
-            await _carClientService.Remove(id);
+    public IActionResult Privacy()
+    {
+        return View();
+    }
 
-            return RedirectToAction(nameof(Index));
-        }
-        #endregion
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

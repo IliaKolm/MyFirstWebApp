@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Авторизация";
+}
+
+<h2 class="h2">Авторизация</h2>
+
+<div asp-validation-summary="All"></div>
+
+<form method="post">
+    <div class="mb-3">
+        <label for="exampleInputEmail" class="form-label">Логин</label>
+        <input type="text" name="Username" class="form-cotrol" id="exampleInputEmail" arsia-describedby="emailHelp">
+    </div>
+    
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Пароль</label>
+        <input type="text" name="password" class="form-cotrol" id="exampleInputPassword1">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Войти</button>
+</form>

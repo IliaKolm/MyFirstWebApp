@@ -41,7 +41,7 @@ namespace CarWebApi.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Cars");
+                    b.ToTable("Cars", (string)null);
                 });
 
             modelBuilder.Entity("CarWebApi.Data.Group", b =>
@@ -56,7 +56,7 @@ namespace CarWebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
                 });
 
             modelBuilder.Entity("CarWebApi.Data.Car", b =>

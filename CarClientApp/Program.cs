@@ -1,4 +1,5 @@
 using CarClientApp.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,13 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<CarClientService>(x => {
     x.BaseAddress = new Uri("http://localhost:5090");
     });
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options => //CookieAuthenticationOptions
+    {
+        options.LoginPath = new PathString("/Account/Login");
+    });
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -23,6 +31,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
